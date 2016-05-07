@@ -1,35 +1,3 @@
-package entities.projectile;
-
-import entities.GameEntity;
-import entities.Player;
-import server.models.GameModel;
-
-public class Projectile extends GameEntity{
-
-    private Player player;
-
-    public Projectile(Player player){
-        super();
-        this.player = player;
-
-
-    }
-
-
-    @Override
-    public void serverUpdate() {
-
-    }
-
-    @Override
-    public GameModel getModel() {
-        return null;
-    }
-}
-
-
-
-
 
 
 //

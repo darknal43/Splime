@@ -74,7 +74,7 @@ public class GameScreen extends AbstractScreen{
 
         public static void updateCamera(Vector2 travelVector){
 
-            getCamera().position.lerp(new Vector3(travelVector, 0), 0.5F);
+            getCamera().position.lerp(new Vector3(travelVector, 0), 0.1F);
         }
 
         public static void resetCameraRatio(){

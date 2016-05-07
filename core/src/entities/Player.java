@@ -3,6 +3,8 @@ package entities;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -25,75 +27,36 @@ import tools.Constants;
  */
 public class Player extends GameEntity {
     private InputHandler inputHandler;
-
+    private AnimationManager animationManager;
     private Sprite [] sprites;
-    private static Animation animation;
-    private static Animation specialEffects;
+
+    private float previous;
 
 
 
     //TODO Adjust this value based on size?
     private float speed = 10;
 
+
     private float totalDelta;
 
-
-
-
-    private static void initiatePlayerAnimation(){
-        if (animation != null) return;
-
-        TextureAtlas textureAtlas = new TextureAtlas("player\\baseAnimation-packed\\pack.atlas");
-        Texture glowEffect = new Texture("player\\testGlowLayer.png");
-        Texture testBlank = new Texture("player\\testBlank.png");
-
-        Sprite frame2 = new Sprite(glowEffect);
-        frame2.setScale(0.8F, 1);
-
-        Sprite frame3 = new Sprite(glowEffect);
-        frame3.setScale(0.7F, 1);
-
-        Sprite frame4 = new Sprite(glowEffect){
-            @Override
-            public void setPosition(float x, float y) {
-                super.setPosition(x, y);
-            }
-        };
-
-        Sprite frame5 = new Sprite(glowEffect){
-            @Override
-            public void setPosition(float x, float y) {
-                super.setPosition(x, y);
-            }
-        };
-
-
-        Sprite [] specialEffects = new Sprite[]{
-                new Sprite(glowEffect),
-                frame2,
-                frame3,
-                frame4,
-                frame5
-
-
-        };
-
-        GameLoop.StaticDisposables.addDisposable(glowEffect);
-        GameLoop.StaticDisposables.addDisposable(testBlank);
-        GameLoop.StaticDisposables.addDisposable(textureAtlas);
-        Array<Sprite> assets = textureAtlas.createSprites();
-
-        animation = new Animation(1F/12, assets);
-        animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
-        Player.specialEffects = new Animation(1/12F, specialEffects);
-        Player.specialEffects.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+    private Player getPlayer(){
+        return this;
     }
+
+    private Vector2 getTravelVector(){
+        return travelVector;
+    }
+
+
+
+
+
 
     private void initiateSprite(){
         totalDelta = 0;
-        sprites = new Sprite[2];
-        sprites[0] = (Sprite)animation.getKeyFrame(totalDelta);
-        sprites[1] = (Sprite)specialEffects.getKeyFrame(totalDelta);
+        sprites = new Sprite[3];
+        updateSprite(0);
     }
 
 
@@ -101,7 +64,9 @@ public class Player extends GameEntity {
     protected void init() {
         super.init();
         inputHandler = new InputHandler(this);
-        initiatePlayerAnimation();
+        animationManager = new AnimationImplementation();
+
+
         initiateSprite();
     }
 
@@ -123,7 +88,6 @@ public class Player extends GameEntity {
     //-------- Your Update Loops ------------------------------------------------------
     @Override
     public void act(float delta) {
-        move();
         updateSprite(delta);
         updateActor();
         super.act(delta);
@@ -132,18 +96,29 @@ public class Player extends GameEntity {
 
 
     private void move(){
-        travelVector.setLength(speed);
-        this.addAction(Actions.moveBy(travelVector.x, travelVector.y, 1));
-
+        System.out.println(totalDelta);
+        travelVector.setLength(130/3F);
+        if (totalDelta !=  previous) {
+            this.addAction(Actions.moveBy(travelVector.x, travelVector.y));
+            previous = totalDelta;
+        }
     }
 
     private void updateSprite(float delta){
+
+        int keyFrameNumber = animationManager.getKeyFrameIndex();
+
+        if (keyFrameNumber == 0){
+            move();
+        }
+
         int index = 0;
-        for (Sprite sprite : new Sprite[]{(Sprite)animation.getKeyFrame(totalDelta), (Sprite)specialEffects.getKeyFrame(totalDelta)}) {
+        Sprite [] arr = animationManager.getAnimationArray();
+        for (Sprite sprite : arr) {
 
             sprite.setPosition(getX() - sprite.getWidth() / 2, getY() - sprite.getHeight() / 2);
             sprite.setOriginCenter();
-            sprite.setRotation(travelVector.angle());
+            sprite.setRotation(travelVector.angle() + 180);
 
             sprites[index++] = sprite;
 
@@ -151,6 +126,7 @@ public class Player extends GameEntity {
         }
 
         totalDelta += delta;
+        animationManager.update(delta, travelVector);
     }
 
 
@@ -189,24 +165,188 @@ public class Player extends GameEntity {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        int i = 0;
+
         for (Sprite sprite : sprites){
 
-
-            if (i++ >= 1){
-
-                batch.setBlendFunction(GL20.GL_DST_COLOR, GL20.GL_ONE);
-                sprite.draw(batch);
-                batch.setBlendFunction(GL20.GL_ONE, GL20.GL_ONE);
-            }else{
-                sprite.draw(batch);
-            }
+            sprite.draw(batch);
 
         }
 
     }
 
 
+}
+
+interface AnimationManager{
+    Sprite [] getAnimationArray();
+    int getKeyFrameIndex();
+    void update(float delta, Vector2 travelVector);
+}
+
+class AnimationImplementation implements AnimationManager{
+    private static TextureAtlas textureAtlas;
+    private static Texture glowEffect;
+    private static Texture testBlank;
+    private float playRate;
+    private Animation.PlayMode playMode;
+    private Array<Animation> animations;
+    private Vector2 currentTravelVector;
+
+    public AnimationImplementation(){
+        init();
+        playMode = Animation.PlayMode.LOOP;
+    }
+
+    private void init(){
+        playRate = 1F/8;
+        animations = new Array<>();
+        currentTravelVector = new Vector2();
+        initiateBaseAssets();
+        initBackSlimeAnimation();
+        initFrontSlimeAnimation();
+        initiateDefaultMoveAnimation();
+
+    }
+
+
+    private int totalDelta;
+
+    private static void initiateBaseAssets(){
+        if (textureAtlas != null) return;
+
+        textureAtlas = new TextureAtlas("player\\baseAnimation-packed\\pack.atlas");
+        glowEffect = new Texture("player\\testGlowLayer.png");
+        testBlank = new Texture("player\\testBlank.png");
+
+        GameLoop.StaticDisposables.addDisposable(glowEffect);
+        GameLoop.StaticDisposables.addDisposable(testBlank);
+        GameLoop.StaticDisposables.addDisposable(textureAtlas);
+
+    }
+
+    public Sprite [] getAnimationArray(){
+        Sprite [] arr = new Sprite[animations.size];
+        int index = 0;
+        for (Animation animation : animations){
+            arr[index++] = (Sprite)animation.getKeyFrame(totalDelta);
+        }
+
+        return arr;
+    }
+
+    public int getKeyFrameIndex(){
+        try {
+            return animations.get(0).getKeyFrameIndex(totalDelta);
+        }catch (NullPointerException e){
+            return 0;
+        }
+    }
+
+    public void update(float delta, Vector2 travelVector){
+        totalDelta += delta;
+    }
+
+    private void initFrontSlimeAnimation(){
+        Animation animation;
+        Sprite frame = new Sprite(testBlank);
+        Sprite frame4 = new Sprite(glowEffect){//-30
+            @Override
+            public void setPosition(float x, float y) {
+                Vector2 rotationAmount = new Vector2(currentTravelVector).setLength(90);
+                super.setPosition(x + rotationAmount.x, y + rotationAmount.y);
+            }
+        };
+        frame4.setScale(0.6F);
+
+        Sprite frame5 = new Sprite(glowEffect){ //-20
+            @Override
+            public void setPosition(float x, float y) {
+                Vector2 rotationAmount = new Vector2(currentTravelVector).setLength(180);
+                super.setPosition(x + rotationAmount.x, y + rotationAmount.y);
+            }
+        };
+        frame5.setScale(0.5F);
+
+        Sprite [] specialEffects = new Sprite[]{
+//                frame,
+                frame,
+                frame,
+                frame,
+                frame4,
+                frame5,
+
+
+        };
+        animation = new Animation(playRate, specialEffects);
+        animation.setPlayMode(playMode);
+        animations.add(animation);
+    }
+
+    private void initBackSlimeAnimation(){
+        Sprite frame1 = new Sprite(glowEffect);
+
+        Sprite frame2 = new Sprite(glowEffect){//-30
+            @Override
+            public void setPosition(float x, float y) {
+                Vector2 rotationAmount = new Vector2(currentTravelVector).setLength(20);
+                super.setPosition(x - rotationAmount.x, y - rotationAmount.y);
+            }
+        };
+        frame2.setScale(0.8F, 1);
+
+        Sprite frame3 = new Sprite(glowEffect){//-30
+            @Override
+            public void setPosition(float x, float y) {
+                Vector2 rotationAmount = new Vector2(currentTravelVector).setLength(20);
+                super.setPosition(x - rotationAmount.x, y - rotationAmount.y);
+            }
+        };
+        frame3.setScale(0.7F, 1);
+
+
+        Sprite frame4 = new Sprite(glowEffect){//-30
+            @Override
+            public void setPosition(float x, float y) {
+                Vector2 rotationAmount = new Vector2(currentTravelVector).setLength(20);
+                super.setPosition(x - rotationAmount.x, y - rotationAmount.y);
+            }
+        };
+        frame4.setScale(0.6F);
+
+        Sprite frame5 = new Sprite(glowEffect){//-30
+            @Override
+            public void setPosition(float x, float y) {
+                Vector2 rotationAmount = new Vector2(currentTravelVector).setLength(20);
+                super.setPosition(x - rotationAmount.x, y - rotationAmount.y);
+            }
+        };
+        frame5.setScale(0.5F);
+
+
+        Sprite [] specialEffects = new Sprite[]{
+                // frame1,
+                frame1,
+                frame2,
+                frame3,
+                frame4,
+                frame5,
+
+
+        };
+
+        Animation animation = new Animation(playRate, specialEffects);
+        animation.setPlayMode(playMode);
+        animations.add(animation);
+
+    }
+
+    private void initiateDefaultMoveAnimation(){
+        Array<Sprite> assets = textureAtlas.createSprites();
+
+        Animation animation = new Animation(playRate, assets);
+        animation.setPlayMode(playMode);
+        animations.add(animation);
+    }
 
 
 }
