@@ -1,6 +1,7 @@
 package server.event;
 
-import entities.Player;
+import server.serverside.GameFactory;
+import server.serverside.ServerSideGame;
 import tools.ServerTools.databases.VirtualDatabase;
 import tools.ServerTools.databases.VirtualDatabaseFactory;
 
@@ -9,13 +10,12 @@ import tools.ServerTools.databases.VirtualDatabaseFactory;
  */
 public abstract class Event {
 
-    private VirtualDatabase database;
-    private Player player;
+    protected VirtualDatabase database;
+    protected ServerSideGame game;
 
-    public Event(int i){
+    public Event(){
         this.database = VirtualDatabaseFactory.createVirtualDatabase();
-        //TODO set player
-
+        this.game = GameFactory.getGame();
     }
 
     public abstract void execute();
