@@ -31,7 +31,7 @@ public class RunGame implements Runnable {
         while(running){
             long now = System.currentTimeMillis();
             deltaOne += (now - lastTime) / ms;
-            deltaTwo = (now-lastTime);
+            deltaTwo = (now - lastTime);
             lastTime = now;
             while (deltaOne >= 1) { //if enough time has elapsed for a frame it paints and moves everything
                 eventHandler.executeAll();

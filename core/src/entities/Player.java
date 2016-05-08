@@ -24,6 +24,7 @@ import state.screens.AbstractScreen;
 import state.screens.GameScreen;
 import tools.AnimationManager;
 import tools.Constants;
+import tools.ServerTools.databases.DatabaseStructure;
 
 /**
  *
@@ -38,6 +39,7 @@ public class Player extends GameEntity {
 
     //Test
     private SlimeGlow glow;
+    private long key;
 
     private Vector2 rotationAngle;
 
@@ -52,8 +54,8 @@ public class Player extends GameEntity {
         cameraReset = true;
     }
 
-    public Player(float x, float y, float width, float height){
-        super(x, y, width, height);
+    public Player(float x, float y, float width, float height, DatabaseStructure databaseStructure){
+        super(x, y, width, height, databaseStructure);
         cameraReset = false;
     }
 
@@ -82,6 +84,7 @@ public class Player extends GameEntity {
         initiateEffects();
         chargeAmount = 0.5F;
 
+
     }
 
     void charge(){
@@ -91,7 +94,7 @@ public class Player extends GameEntity {
 
     void shoot(){
         AbstractScreen abstractScreen = (AbstractScreen)GameLoopFactory.getMainGameLoop().getScreen();
-        ProjectileBenign newShot = new ProjectileBenign(this, chargeAmount, travelVector);
+        ProjectileBenign newShot = new ProjectileBenign(this, chargeAmount, travelVector, databaseStructure);
         abstractScreen.getStage().addActor(newShot);
         charging = false;
     }
@@ -223,7 +226,13 @@ public class Player extends GameEntity {
 
     }
 
+    public long getKey() {
+        return key;
+    }
 
+    public void setKey(long key) {
+        this.key = key;
+    }
 }
 
 

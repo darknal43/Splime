@@ -14,6 +14,7 @@ import entities.projectile.ProjectileBenign;
 import server.models.GameModel;
 import state.screens.AbstractScreen;
 import tools.AnimationManager;
+import tools.ServerTools.databases.DatabaseStructure;
 import tools.WorldFactory;
 
 /**
@@ -29,15 +30,20 @@ public abstract class GameEntity extends Actor {
     protected Body body;
     protected Array<Disposable> disposables;
     protected World world;
+    protected DatabaseStructure databaseStructure;
 
 
     public GameEntity(){
-        this(0, 0, 100, 100);
+        this(0, 0, 100, 100, null);
     }
 
 
-    public GameEntity(float x, float y, float width, float height){
-        
+    public GameEntity(float x, float y, float width, float height, DatabaseStructure databaseStructure){
+
+        this.databaseStructure  = databaseStructure;
+
+
+
         if (width == 0 || height == 0)
             throw new IllegalArgumentException("Game Entity Dimensions Cannot Be Zero");
 
@@ -56,8 +62,9 @@ public abstract class GameEntity extends Actor {
 
 
         travelVector = new Vector2();
+
         currentLocation = new Vector2(getX(), getY());
-        targetLocation = new Vector2();
+        targetLocation = new Vector2().setToRandomDirection();
         //initBox2D();
 
 
@@ -102,4 +109,12 @@ public abstract class GameEntity extends Actor {
 
 
     public abstract GameModel getModel();
+
+    public DatabaseStructure getDatabaseStructure() {
+        return databaseStructure;
+    }
+
+    public void setDatabaseStructure(DatabaseStructure databaseStructure) {
+        this.databaseStructure = databaseStructure;
+    }
 }

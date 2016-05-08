@@ -2,6 +2,7 @@ package tools.ServerTools.databases;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import driver.GameLoopFactory;
+import entities.GameEntity;
 import server.models.GameModel;
 import state.screens.AbstractScreen;
 import tools.Utils;
@@ -13,28 +14,26 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * Created by Hongyu Wang on 3/19/2016.
  */
-public class LocalDatabase {
+public class LocalDatabase extends DatabaseStructure{
 
-    private ConcurrentHashMap<Long, GameModel> models;
-    private Stage gameStage;
     public static String ipAddress = "localhost";
 
     LocalDatabase(){
-        models = Utils.newConcurrentMap();
-        this.gameStage = ((AbstractScreen)(GameLoopFactory.getMainGameLoop().getScreen())).getStage();
+        super();
+        this.actorList = ((AbstractScreen)(GameLoopFactory.getMainGameLoop().getScreen())).getStage().getActors();
     }
 
-    public <E extends GameModel> E getModel(long key){
-        try {
-            return (E) models.get(key);
-        }
-        catch(ClassCastException e){
-            return null;
-        }
-    }
+    @Override
+    public void addModel(GameModel model) {
 
-    public void updateModel(GameModel model){
-        models.put(model.getKey(), model);
+        if(data.containsKey(model.getKey())){
+            GameEntity entity = new GameEntity(model);
+            if(entity instanceof )
+            ((AbstractScreen)(GameLoopFactory.getMainGameLoop().getScreen())).getStage();
+        }
+
+        data.put(model.getKey(), model);
+
     }
 
     /**Pushes the model into the database.
@@ -47,7 +46,7 @@ public class LocalDatabase {
     /**
     public void pushModel(List<GameModel> modelList){
         for(GameModel model: modelList){
-            models.put(model.getKey(), model);
+            data.put(model.getKey(), model);
         }
         PostObject.newInstance().addModel(modelList.toArray(new GameModel[modelList.size()]));
     }

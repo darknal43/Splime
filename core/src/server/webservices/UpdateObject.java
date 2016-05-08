@@ -15,7 +15,6 @@ import tools.ServerTools.generators.Tags;
  */
 public class UpdateObject implements Net.HttpResponseListener {
     private LocalDatabase localDatabase = LocalDatabaseFactory.createLocalDatabase();
-    private JsonReader reader = new JsonReader();
     private ObjectMapper objectMapper = new ObjectMapper();
     private Object rOjbect;
 
@@ -45,7 +44,7 @@ public class UpdateObject implements Net.HttpResponseListener {
                 String className = Tags.ID_TAGS.getName(tag);
                 json = model.substring(0, json.length() - 4);
                 rOjbect = objectMapper.readValue(json, Class.forName(className));
-                localDatabase.updateModel((GameModel)rOjbect);
+                localDatabase.addModel((GameModel)rOjbect);
             }
         } catch (Exception e) {
             System.out.println(e);

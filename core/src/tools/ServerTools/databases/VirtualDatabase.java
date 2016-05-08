@@ -1,5 +1,6 @@
 package tools.ServerTools.databases;
 
+import server.event.EventHandler;
 import server.models.GameModel;
 import server.models.PlayerModel;
 import tools.ServerTools.generators.SerialGenerator;
@@ -12,18 +13,20 @@ import java.util.*;
 /** *
  * Created by Kevin Zheng on 2016-03-09.
  */
-public class VirtualDatabase {
-    private Map<Long, GameModel> data;
-    private SerialGenerator generator = SerialGenerator.getGenerator();
+public class VirtualDatabase extends DatabaseStructure{
     private PlayerModel availablePlayer;
+    private EventHandler eventHandler;
+    private long nextKey = 0;
 
     public VirtualDatabase(){
-        init();
+        super();
+        this.data = Utils.newConcurrentMap();
     }
 
-    public void init()
-    {
-        this.data = Utils.newConcurrentMap();
+    public long getAvailableKey(){
+        long currentKey = nextKey;
+        nextKey++;
+        return currentKey;
     }
 
     /**Gets a model from the database.
@@ -31,18 +34,10 @@ public class VirtualDatabase {
      * @param key   The key of the model.
      * @return
      */
-    public GameModel getModel(long key){
-        return data.get(key);
-    }
 
-    public void addModel(GameModel model){
-        data.put(model.getKey(), model);
-    }
 
-    /**Sets a model into the database.
-     *
-     * @param newModel The model.
-     */
+
+    /**
     public void setModel(GameModel newModel){
         if(data.containsKey(newModel.getKey())) {
             Field[] newFields = newModel.getClass().getDeclaredFields();
@@ -83,6 +78,7 @@ public class VirtualDatabase {
         data.put(newModel.getKey(), newModel);
 
     }
+    **/
 
     private <T> List<T> union(List<T> list1, List<T> list2) {
         Set<T> set = new HashSet<T>();

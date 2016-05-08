@@ -1,6 +1,7 @@
 package entities.effects;
 
 import box2dLight.ConeLight;
+import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.Color;
 import entities.GameEntity;
@@ -19,6 +20,7 @@ public class SlimeGlow{
     private ConeLight lightOne;
     private ConeLight lightTwo;
     private ConeLight lightThree;
+    private PointLight lightFour;
     private Color colour;
     private RayHandler rayHandler;
 
@@ -29,22 +31,25 @@ public class SlimeGlow{
         this.rayHandler = RayFactory.getRayHandler();
 
         float degreeOne = 60;
-        lightOne = new ConeLight(rayHandler,100, colour, 500, xPos, yPos, degreeOne, 60);
+        //lightOne = new ConeLight(rayHandler,100, colour, 500, xPos, yPos, 0.5f, 60);
         float degreeTwo = 180;
-        lightTwo = new ConeLight(rayHandler,100, colour, 500, xPos, yPos, degreeTwo, 60);
+        //lightTwo = new ConeLight(rayHandler,100, colour, 500, xPos, yPos, degreeTwo, 60);
         float degreeThree= 300;
-        lightThree = new ConeLight(rayHandler,100, colour, 500, xPos, yPos, degreeThree, 60);
+        //lightThree = new ConeLight(rayHandler,100, colour, 500, xPos, yPos, degreeThree, 60);
+        lightFour = new PointLight(rayHandler,500, Color.BLUE, 500, x, y);
+
     }
 
     public void update(float x, float y){
         this.xPos = x;
         this.yPos = y;
-        lightOne.setPosition(xPos,yPos);
-        lightOne.setConeDegree(degreeOne);
-        lightTwo.setPosition(xPos,yPos);
-        lightTwo.setConeDegree(degreeTwo);
-        lightThree.setPosition(xPos,yPos);
-        lightThree.setConeDegree(degreeThree);
+        lightFour.setPosition(x,y);
+        //lightOne.setPosition(xPos,yPos);
+        //lightOne.setDirection(degreeOne);
+        //lightTwo.setPosition(xPos,yPos);
+        //lightTwo.setDirection(degreeTwo);
+        //lightThree.setPosition(xPos,yPos);
+        //lightThree.setDirection(degreeThree);
 
         animate();
     }

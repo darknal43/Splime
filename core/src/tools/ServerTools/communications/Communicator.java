@@ -1,6 +1,7 @@
 package tools.ServerTools.communications;
 
 import server.models.PlayerModel;
+import server.webservices.CreateObject;
 import server.webservices.PostObject;
 import server.webservices.UpdateObject;
 
@@ -38,9 +39,9 @@ public class Communicator {
     }
 
     public void sendCreatePlayerRequest(PlayerModel player){
-        PostObject postObject = PostObject.newInstance();
-        postObject.setCreatePlayer(player);
-        postObject.sendPost();
+        CreateObject createObject = CreateObject.newInstance();
+        createObject.requestPlayer();
+
     }
 
     public void updateAll(){

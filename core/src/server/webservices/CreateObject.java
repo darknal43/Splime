@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.JsonReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import entities.Player;
 import server.models.PlayerModel;
 import tools.ServerTools.databases.LocalDatabase;
 import tools.ServerTools.databases.LocalDatabaseFactory;
@@ -14,7 +15,6 @@ import tools.ServerTools.databases.LocalDatabaseFactory;
  */
 public class CreateObject implements Net.HttpResponseListener {
     private LocalDatabase localDatabase = LocalDatabaseFactory.createLocalDatabase();
-    private JsonReader reader = new JsonReader();
     private ObjectMapper objectMapper = new ObjectMapper();
     private Object rOjbect;
 
@@ -23,9 +23,9 @@ public class CreateObject implements Net.HttpResponseListener {
 
     }
 
-    public void updateAll(){
+    public void requestPlayer(){
         Net.HttpRequest httpGet = new Net.HttpRequest(Net.HttpMethods.GET);
-        httpGet.setUrl("http://"+ LocalDatabase.ipAddress+":8081/webservice/updateAll");
+        httpGet.setUrl("http://"+ LocalDatabase.ipAddress+":8081/webservice/createPlayer");
         Gdx.net.sendHttpRequest(httpGet, this);
     }
 
@@ -39,6 +39,8 @@ public class CreateObject implements Net.HttpResponseListener {
         try {
             String json = httpResponse.getResultAsString();
             rOjbect = objectMapper.readValue(json, PlayerModel.class);
+            localDatabase.addModel((PlayerModel)rOjbect);
+
         } catch (Exception e) {
             System.out.println(e);
         }

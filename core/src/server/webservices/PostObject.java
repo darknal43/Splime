@@ -42,22 +42,6 @@ public class PostObject implements Net.HttpResponseListener {
     }
     **/
 
-    public void setCreatePlayer(PlayerModel model){
-
-        // LibGDX NET CLASS
-        httpPost.setUrl("http://"+ LocalDatabase.ipAddress+":8081/webservice/createPlayer");
-        String postString = "";
-
-        try {
-            postString = objectMapper.writeValueAsString(model);
-        }catch(Exception e){
-            System.out.println(e);
-        }
-
-        httpPost.setContent(postString);
-
-    }
-
     public void setLeaveGame(PlayerModel model){
 
         httpPost.setUrl("http://"+ LocalDatabase.ipAddress+":8081/webservice/LeaveGame");
