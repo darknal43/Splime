@@ -24,7 +24,7 @@ import tools.ServerTools.databases.LocalDatabaseFactory;
  */
 public class ProjectileBenign extends GameEntity{
 
-    private long player;
+    private Player player;
 
     private final float DECREASE_AMOUNT = 0.7F/3;
     private final float SMALLEST_CHARGE = 0.3F;
