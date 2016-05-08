@@ -30,7 +30,6 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
 
-        // todo webservices
         // Restful web services client repository
         maven { url "https://repo.spring.io/libs-milestone" }
     }
@@ -138,7 +137,6 @@ project(":core") {
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
 
-        // todo webservices
         // resteasy server.
         compile ('org.jboss.resteasy:resteasy-netty:3.0.16.Final') {
             exclude group: 'org.apache.httpcomponents'

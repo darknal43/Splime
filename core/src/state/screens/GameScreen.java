@@ -72,7 +72,7 @@ public class GameScreen extends AbstractScreen{
 
     static public class CameraManager extends InputAdapter {
         static InputAdapter inputManager;
-        private static OrthographicCamera getCamera(){
+        public static OrthographicCamera getCamera(){
             AbstractScreen screen = (AbstractScreen) GameLoopFactory.getMainGameLoop().getScreen();
 
             return (OrthographicCamera)(screen).getStage().getCamera();

@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 import driver.GameLoop;
+import entities.effects.SlimeGlow;
 import server.models.GameModel;
 import state.screens.GameScreen;
 import tools.Constants;
@@ -30,6 +31,10 @@ public class Player extends GameEntity {
     private AnimationImplementation animationManager;
     private Sprite [] sprites;
 
+    //Test
+    private SlimeGlow glow;
+
+
     private float previous;
 
 
@@ -41,12 +46,15 @@ public class Player extends GameEntity {
 
 
 
-
-
+    //Test
+    private void initateEffects(){
+        this.glow = new SlimeGlow(this.getX(), this.getY(), Color.WHITE);
+    }
 
     private void initiateSprite(){
         sprites = new Sprite[3];
         updateSprite(0);
+
     }
 
 
@@ -55,9 +63,10 @@ public class Player extends GameEntity {
         super.init();
         inputHandler = new InputHandler(this);
         animationManager = new AnimationImplementation();
-
-
         initiateSprite();
+        initateEffects();
+
+
     }
 
 
@@ -81,7 +90,7 @@ public class Player extends GameEntity {
         updateSprite(delta);
         updateActor();
         super.act(delta);
-
+        glow.update(this.getX(), this.getY());
     }
 
 
