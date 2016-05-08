@@ -12,6 +12,7 @@ public interface ConicHitbox {
 
     boolean findCollision(ConicHitbox other);
 
+    void pushCollision();
 
     void updateHitbox();
 }
