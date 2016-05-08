@@ -211,7 +211,12 @@ public class Player extends GameEntity {
 
     @Override
     public GameModel getModel() {
-        return null;
+        PlayerModel model = new PlayerModel();
+        model.setX(getX());
+        model.setY(getY());
+
+        model.setKey(getKey());
+        return model;
     }
 
     @Override

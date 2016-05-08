@@ -128,7 +128,15 @@ public class ProjectileBenign extends GameEntity{
 
     @Override
     public GameModel getModel() {
-        return null;
+        ProjectileBenignModel projectileBenignModel = new ProjectileBenignModel();
+        projectileBenignModel.setKey(getKey());
+        projectileBenignModel.setChargeAmount(chargeAmount);
+        projectileBenignModel.setX(getX());
+        projectileBenignModel.setY(getY());
+        projectileBenignModel.setTargetX(targetLocation.x);
+        projectileBenignModel.setTargetY(targetLocation.y);
+
+        return projectileBenignModel;
     }
 
     @Override

@@ -17,7 +17,6 @@ import tools.WorldFactory;
  */
 public class GameScreen extends AbstractScreen{
 
-
     @Override
     protected void subclassInit() {
         initiateBackground();
@@ -27,10 +26,7 @@ public class GameScreen extends AbstractScreen{
 
     }
 
-    @Override
-    public void render(float delta) {
-        super.render(delta);
-    }
+
 
     private void initPlayer(){
         GameEntity mainPlayer;
@@ -45,12 +41,13 @@ public class GameScreen extends AbstractScreen{
     }
 
     private void initiateBackground(){
-        Texture tex;
-        Image image;
-        image = new Image(tex = new Texture("BackgroundConcepts\\granit_texture4410.jpg"));
-        image.setPosition(0, 0);
-        disposables.add(tex);
-        stage.addActor(image);
+
+        Texture background;
+        background = new Texture("background\\hexTiles.png");
+        background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        disposables.add(background);
+        Image image = new Image(background);
+
     }
 
 

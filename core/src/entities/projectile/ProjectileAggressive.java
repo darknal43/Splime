@@ -2,6 +2,8 @@ package entities.projectile;
 
 import com.badlogic.gdx.math.Vector2;
 import entities.Player;
+import server.models.GameModel;
+import server.models.ProjectileAggressiveModel;
 import tools.ServerTools.databases.DatabaseStructure;
 
 /**
@@ -30,6 +32,15 @@ public class ProjectileAggressive extends Player {
         if (Math.abs(new Vector2(targetLocation).sub(currentLocation).len()) <= 10){
             this.remove();
         }
+    }
+
+    @Override
+    public GameModel getModel() {
+        ProjectileAggressiveModel projectileAggressiveModel = new ProjectileAggressiveModel();
+        projectileAggressiveModel.setKey(getKey());
+        projectileAggressiveModel.setX(getX());
+        projectileAggressiveModel.setY(getY());
+        return projectileAggressiveModel;
     }
 }
 

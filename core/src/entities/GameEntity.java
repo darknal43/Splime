@@ -1,28 +1,21 @@
 package entities;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import driver.GameLoop;
-import javafx.geometry.Bounds;
 import javafx.scene.shape.Ellipse;
 import server.models.GameModel;
 import tools.AnimationManager;
 import tools.ServerTools.databases.DatabaseStructure;
-import tools.ServerTools.databases.LocalDatabaseFactory;
 import tools.WorldFactory;
 import tools.hitboxes.ConicHitbox;
-
-import java.awt.geom.Ellipse2D;
 
 /**
  *
@@ -33,7 +26,7 @@ public abstract class GameEntity extends Actor implements ConicHitbox{
     protected Vector2 currentLocation;
     protected Vector2 targetLocation;
     protected Vector2 travelVector;
-    private int key;
+    private long key;
 
     protected static ShapeRenderer shapeRenderer;
 
@@ -133,11 +126,11 @@ public abstract class GameEntity extends Actor implements ConicHitbox{
         sprite.draw(batch);
     }
 
-    public int getKey() {
+    public long getKey() {
         return key;
     }
 
-    public void setKey(int key) {
+    public void setKey(long key) {
         this.key = key;
     }
 

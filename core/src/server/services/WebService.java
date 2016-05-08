@@ -107,7 +107,7 @@ public class WebService {
                 model = model.substring(0, model.length() - 4);
                 Class name = Class.forName(className);
                 realModel = (GameModel) objectMapper.readValue(model, name);
-                database.setModel(realModel);
+                database.addModel(realModel);
 
             }
 

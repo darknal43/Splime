@@ -34,7 +34,7 @@ public class GameLoop extends Game {
 
     @Override
     public void render () {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0.7F, 0.2F, 0.7F, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
