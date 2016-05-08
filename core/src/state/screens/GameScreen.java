@@ -22,8 +22,14 @@ public class GameScreen extends AbstractScreen{
     protected void subclassInit() {
         initiateBackground();
 
+        //TODO initplayer information
         initPlayer();
 
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
     }
 
     private void initPlayer(){

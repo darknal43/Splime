@@ -27,26 +27,17 @@ import tools.Constants;
  */
 public class Player extends GameEntity {
     private InputHandler inputHandler;
-    private AnimationManager animationManager;
+    private AnimationImplementation animationManager;
     private Sprite [] sprites;
 
     private float previous;
 
 
 
-    //TODO Adjust this value based on size?
-    private float speed = 10;
 
 
     private float totalDelta;
 
-    private Player getPlayer(){
-        return this;
-    }
-
-    private Vector2 getTravelVector(){
-        return travelVector;
-    }
 
 
 
@@ -54,7 +45,6 @@ public class Player extends GameEntity {
 
 
     private void initiateSprite(){
-        totalDelta = 0;
         sprites = new Sprite[3];
         updateSprite(0);
     }
@@ -91,12 +81,12 @@ public class Player extends GameEntity {
         updateSprite(delta);
         updateActor();
         super.act(delta);
+
     }
 
 
 
     private void move(){
-        System.out.println(totalDelta);
         travelVector.setLength(130/3F);
         if (totalDelta !=  previous) {
             this.addAction(Actions.moveBy(travelVector.x, travelVector.y));
@@ -115,7 +105,6 @@ public class Player extends GameEntity {
         int index = 0;
         Sprite [] arr = animationManager.getAnimationArray();
         for (Sprite sprite : arr) {
-
             sprite.setPosition(getX() - sprite.getWidth() / 2, getY() - sprite.getHeight() / 2);
             sprite.setOriginCenter();
             sprite.setRotation(travelVector.angle() + 180);
@@ -126,6 +115,7 @@ public class Player extends GameEntity {
         }
 
         totalDelta += delta;
+
         animationManager.update(delta, travelVector);
     }
 
@@ -189,27 +179,28 @@ class AnimationImplementation implements AnimationManager{
     private static Texture testBlank;
     private float playRate;
     private Animation.PlayMode playMode;
+    public Animation secondAnimation;
     private Array<Animation> animations;
     private Vector2 currentTravelVector;
+    private float totalDelta;
 
     public AnimationImplementation(){
         init();
-        playMode = Animation.PlayMode.LOOP;
     }
 
     private void init(){
+
+        playMode = Animation.PlayMode.LOOP;
         playRate = 1F/8;
         animations = new Array<>();
         currentTravelVector = new Vector2();
         initiateBaseAssets();
+        initiateDefaultMoveAnimation();
         initBackSlimeAnimation();
         initFrontSlimeAnimation();
-        initiateDefaultMoveAnimation();
 
     }
 
-
-    private int totalDelta;
 
     private static void initiateBaseAssets(){
         if (textureAtlas != null) return;
@@ -235,15 +226,14 @@ class AnimationImplementation implements AnimationManager{
     }
 
     public int getKeyFrameIndex(){
-        try {
-            return animations.get(0).getKeyFrameIndex(totalDelta);
-        }catch (NullPointerException e){
-            return 0;
-        }
+
+        return animations.get(0).getKeyFrameIndex(totalDelta);
+
     }
 
     public void update(float delta, Vector2 travelVector){
         totalDelta += delta;
+        this.currentTravelVector = travelVector;
     }
 
     private void initFrontSlimeAnimation(){
@@ -279,10 +269,11 @@ class AnimationImplementation implements AnimationManager{
         };
         animation = new Animation(playRate, specialEffects);
         animation.setPlayMode(playMode);
+        secondAnimation = animation;
         animations.add(animation);
     }
 
-    private void initBackSlimeAnimation(){
+        private void initBackSlimeAnimation(){
         Sprite frame1 = new Sprite(glowEffect);
 
         Sprite frame2 = new Sprite(glowEffect){//-30
