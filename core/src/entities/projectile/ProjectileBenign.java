@@ -44,7 +44,7 @@ public class ProjectileBenign extends GameEntity{
     }
 
     public ProjectileBenign(Player player, float chargeAmount, Vector2 targetDirection){
-        super(player.getX(), player.getY(), 0, 0, );
+        super(player.getX(), player.getY(), player.getDatabaseStructure());
 
         System.out.println(chargeAmount);
 
