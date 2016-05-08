@@ -1,9 +1,6 @@
 package tools.hitboxes;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-
-import java.awt.geom.Ellipse2D;
+import javafx.scene.shape.Ellipse;
 
 /**
  *
@@ -11,7 +8,7 @@ import java.awt.geom.Ellipse2D;
  */
 public interface ConicHitbox {
 
-    Ellipse2D getHitbox();
+    Ellipse getHitbox();
 
     boolean findCollision(ConicHitbox other);
 
