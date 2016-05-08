@@ -9,7 +9,7 @@ package tools;
 public interface Constants {
 
 
-    float SCALE = 0.5F;
+    float SCALE = 1F;
 
 
 

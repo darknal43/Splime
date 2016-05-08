@@ -37,8 +37,10 @@ public class GameScreen extends AbstractScreen{
 
         stage.addActor(mainPlayer = new Player());
         stage.setKeyboardFocus(mainPlayer);
+        OrthographicCamera cam = (OrthographicCamera)stage.getCamera();
+        cam.zoom = 3;
 
-        ((OrthographicCamera)stage.getCamera()).zoom = 1F;
+        ((OrthographicCamera)stage.getCamera()).zoom =4F;
 
     }
 
@@ -88,7 +90,7 @@ public class GameScreen extends AbstractScreen{
         }
 
         public static void zoom(int dir){
-            if (dir < 0 && getCamera().zoom <= 0.4F || dir > 0 && getCamera().zoom >= 4F)
+            if (dir < 0 && getCamera().zoom <= 1F || dir > 0 && getCamera().zoom >= 10F)
                 return;
             getCamera().zoom += .2F*dir;
         }

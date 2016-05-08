@@ -20,6 +20,6 @@ public class MoveEvent extends Event {
 
     @Override
     public void execute() {
-        player.setMouseLocation(xTar, yTar);
+        player.setTargetLocation(xTar, yTar);
     }
 }

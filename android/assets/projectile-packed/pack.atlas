@@ -1,0 +1,34 @@
+
+pack.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+projectile00000
+  rotate: false
+  xy: 2, 582
+  size: 297, 288
+  orig: 297, 288
+  offset: 0, 0
+  index: -1
+projectile00001
+  rotate: false
+  xy: 2, 292
+  size: 297, 288
+  orig: 297, 288
+  offset: 0, 0
+  index: -1
+projectile00002
+  rotate: false
+  xy: 301, 582
+  size: 297, 288
+  orig: 297, 288
+  offset: 0, 0
+  index: -1
+projectile00003
+  rotate: false
+  xy: 2, 2
+  size: 297, 288
+  orig: 297, 288
+  offset: 0, 0
+  index: -1

@@ -9,7 +9,11 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import driver.GameLoopFactory;
+import entities.projectile.ProjectileBenign;
 import server.models.GameModel;
+import state.screens.AbstractScreen;
+import tools.AnimationManager;
 import tools.WorldFactory;
 
 /**
@@ -17,7 +21,7 @@ import tools.WorldFactory;
  * Created by Hongyu Wang on 5/5/2016.
  */
 public abstract class GameEntity extends Actor {
-
+    protected AnimationManager animationManager;
     protected Sprite sprite;
     protected Vector2 currentLocation;
     protected Vector2 targetLocation;
@@ -33,7 +37,7 @@ public abstract class GameEntity extends Actor {
 
 
     public GameEntity(float x, float y, float width, float height){
-
+        
         if (width == 0 || height == 0)
             throw new IllegalArgumentException("Game Entity Dimensions Cannot Be Zero");
 
@@ -49,7 +53,6 @@ public abstract class GameEntity extends Actor {
 
         world = WorldFactory.getWorld();
 
-        sprite = new Sprite();
 
 
         travelVector = new Vector2();
@@ -60,6 +63,12 @@ public abstract class GameEntity extends Actor {
 
     }
 
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        animationManager.update(delta, travelVector);
+    }
 
 
 
@@ -91,7 +100,6 @@ public abstract class GameEntity extends Actor {
         return super.remove();
     }
 
-    public abstract void serverUpdate();
 
     public abstract GameModel getModel();
 }
