@@ -1,10 +1,7 @@
 package entities.projectile;
 
 import com.badlogic.gdx.math.Vector2;
-import driver.GameLoopFactory;
 import entities.Player;
-import state.screens.AbstractScreen;
-import tools.ServerTools.databases.DatabaseStructure;
 
 /**
  *
@@ -14,8 +11,8 @@ import tools.ServerTools.databases.DatabaseStructure;
 public class ProjectileAggressive extends Player {
     private Player mainPlayer;
 
-    public ProjectileAggressive(Player mainPlayer, float x, float y, DatabaseStructure databaseStructure){
-        super(x, y, 100, 100, databaseStructure);
+    public ProjectileAggressive(Player mainPlayer, float x, float y){
+        super(x, y, 0, 0);
         setScale(0.5F);
         this.mainPlayer = mainPlayer;
     }

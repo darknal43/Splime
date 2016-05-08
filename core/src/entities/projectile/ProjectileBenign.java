@@ -14,8 +14,6 @@ import entities.PlayerAnimationImplementation;
 import server.models.GameModel;
 import state.screens.AbstractScreen;
 import tools.AbstractAnimationImplementation;
-import tools.AnimationManager;
-import tools.ServerTools.databases.DatabaseStructure;
 
 /**
  *
@@ -24,17 +22,16 @@ import tools.ServerTools.databases.DatabaseStructure;
 public class ProjectileBenign extends GameEntity{
 
     private Player player;
-    private long key;
+
     private final float DECREASE_AMOUNT = 0.7F/3;
-    private int totalDelta;
     private final float SMALLEST_CHARGE = 0.3F;
 
     private float chargeAmount;
     private Sprite [] sprites;
     private Vector2 rotationAngle;
 
-    public ProjectileBenign(Player player, float chargeAmount, Vector2 targetDirection, DatabaseStructure databaseStructure){
-        super(player.getX(), player.getY(), 100, 100, databaseStructure);
+    public ProjectileBenign(Player player, float chargeAmount, Vector2 targetDirection){
+        super(player.getX(), player.getY(), 0, 0);
 
         System.out.println(chargeAmount);
 
@@ -43,7 +40,6 @@ public class ProjectileBenign extends GameEntity{
 
         this.travelVector = new Vector2(targetDirection);
         this.targetLocation = new Vector2(travelVector).setLength(10000).add(currentLocation);
-        totalDelta = 0;
 
 
         sprites = new Sprite[2];
@@ -60,7 +56,7 @@ public class ProjectileBenign extends GameEntity{
     }
 
     @Override
-    public void act(float delta){
+    public void act(float delta) {
         super.act(delta);
         updateSprite(delta);
         despawn();
@@ -96,8 +92,6 @@ public class ProjectileBenign extends GameEntity{
 
         }
 
-        totalDelta += delta;
-
     }
 
 
@@ -106,8 +100,7 @@ public class ProjectileBenign extends GameEntity{
         if (Math.abs(chargeAmount - SMALLEST_CHARGE) <= 0.01F){
             this.remove();
             AbstractScreen abstractScreen = (AbstractScreen) GameLoopFactory.getMainGameLoop().getScreen();
-            ProjectileAggressive aggressive = new ProjectileAggressive(player, getX(), getY(), databaseStructure);
-
+            ProjectileAggressive aggressive = new ProjectileAggressive(player, getX(), getY());
             abstractScreen.getStage().addActor(aggressive);
         }
     }
@@ -123,14 +116,6 @@ public class ProjectileBenign extends GameEntity{
     @Override
     public GameModel getModel() {
         return null;
-    }
-
-    public long getKey() {
-        return key;
-    }
-
-    public void setKey(long key) {
-        this.key = key;
     }
 }
 
@@ -183,8 +168,6 @@ class ProjectileAnimationImplementation extends AbstractAnimationImplementation{
         animations.add(animation);
 
     }
-
-
 
 
 

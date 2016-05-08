@@ -136,6 +136,19 @@ public class Player extends GameEntity {
         }
     }
 
+    private static Vector2 [] sizes;
+
+    private void setSize(int keyframe){
+        if (sizes == null)
+            sizes = new Vector2[]{
+                    new Vector2(250, 250),
+                    new Vector2(211, 300),
+                    new Vector2(204, 312),
+                    new Vector2(275, 234),
+                    new Vector2(334, 200),
+            };
+        setSize(sizes[keyframe].x, sizes[keyframe].y);
+    }
 
     private void updateSprite(float delta){
 
@@ -145,11 +158,17 @@ public class Player extends GameEntity {
             move();
         }
 
+        setSize(keyFrameNumber);
+
+
+
         int index = 0;
         Sprite [] arr = animationManager.getAnimationArray();
         for (Sprite sprite : arr) {
             sprite.setPosition(getX() - sprite.getWidth() / 2, getY() - sprite.getHeight() / 2);
             sprite.setOriginCenter();
+
+
             sprite.setRotation(index > 0 ? rotationAngle.angle() : travelVector.angle() + 180);
             rotationAngle.rotate(-1.2F);
             sprites[index++] = sprite;
@@ -224,6 +243,7 @@ public class Player extends GameEntity {
             counter++;
         }
 
+        drawHitBox(batch);
     }
 
     public long getKey() {
