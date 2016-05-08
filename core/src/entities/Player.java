@@ -133,6 +133,17 @@ public class Player extends GameEntity {
         }
     }
 
+    private Vector2 [] points = {
+        new Vector2(250, 250),
+        new Vector2(),
+        new Vector2(204, 312),
+        new Vector2(),
+        new Vector2(),
+    };
+
+    private void setSize(int keyframe){
+
+    }
 
     private void updateSprite(float delta){
 
@@ -140,13 +151,18 @@ public class Player extends GameEntity {
 
         if (keyFrameNumber == 0){
             move();
+            setSize(keyFrameNumber);
         }
+
+
 
         int index = 0;
         Sprite [] arr = animationManager.getAnimationArray();
         for (Sprite sprite : arr) {
             sprite.setPosition(getX() - sprite.getWidth() / 2, getY() - sprite.getHeight() / 2);
             sprite.setOriginCenter();
+
+
             sprite.setRotation(index > 0 ? rotationAngle.angle() : travelVector.angle() + 180);
             rotationAngle.rotate(-1.2F);
             sprites[index++] = sprite;

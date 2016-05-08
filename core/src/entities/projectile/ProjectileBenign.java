@@ -14,7 +14,6 @@ import entities.PlayerAnimationImplementation;
 import server.models.GameModel;
 import state.screens.AbstractScreen;
 import tools.AbstractAnimationImplementation;
-import tools.AnimationManager;
 
 /**
  *
@@ -25,9 +24,6 @@ public class ProjectileBenign extends GameEntity{
     private Player player;
 
     private final float DECREASE_AMOUNT = 0.7F/3;
-
-    private int totalDelta;
-
     private final float SMALLEST_CHARGE = 0.3F;
 
     private float chargeAmount;
@@ -35,7 +31,7 @@ public class ProjectileBenign extends GameEntity{
     private Vector2 rotationAngle;
 
     public ProjectileBenign(Player player, float chargeAmount, Vector2 targetDirection){
-        super(player.getX(), player.getY(), 100, 100);
+        super(player.getX(), player.getY(), 0, 0);
 
         System.out.println(chargeAmount);
 
@@ -44,7 +40,6 @@ public class ProjectileBenign extends GameEntity{
 
         this.travelVector = new Vector2(targetDirection);
         this.targetLocation = new Vector2(travelVector).setLength(10000).add(currentLocation);
-        totalDelta = 0;
 
 
         sprites = new Sprite[2];
@@ -96,8 +91,6 @@ public class ProjectileBenign extends GameEntity{
             sprites[index++] = sprite;
 
         }
-
-        totalDelta += delta;
 
     }
 

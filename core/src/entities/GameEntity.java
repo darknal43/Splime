@@ -15,31 +15,34 @@ import server.models.GameModel;
 import state.screens.AbstractScreen;
 import tools.AnimationManager;
 import tools.WorldFactory;
+import tools.hitboxes.ConicHitbox;
+
+import java.awt.geom.Ellipse2D;
 
 /**
  *
  * Created by Hongyu Wang on 5/5/2016.
  */
-public abstract class GameEntity extends Actor {
+public abstract class GameEntity extends Actor implements ConicHitbox{
     protected AnimationManager animationManager;
-    protected Sprite sprite;
     protected Vector2 currentLocation;
     protected Vector2 targetLocation;
     protected Vector2 travelVector;
-    protected Body body;
+
+
+    protected Ellipse2D hitBox;
+
     protected Array<Disposable> disposables;
     protected World world;
 
 
     public GameEntity(){
-        this(0, 0, 100, 100);
+        this(0, 0, 0, 0);
     }
 
 
     public GameEntity(float x, float y, float width, float height){
         
-        if (width == 0 || height == 0)
-            throw new IllegalArgumentException("Game Entity Dimensions Cannot Be Zero");
 
         setBounds(x, y, width, height);
 
@@ -58,39 +61,20 @@ public abstract class GameEntity extends Actor {
         travelVector = new Vector2();
         currentLocation = new Vector2(getX(), getY());
         targetLocation = new Vector2();
-        //initBox2D();
-
+        hitBox = new Ellipse2D.Double(getX() - getWidth()/2, getY() + getHeight()/2, getWidth(), getHeight());
 
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-
+        updateHitbox();
         animationManager.update(delta, travelVector);
     }
 
 
 
-    private void initBox2D(){
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(getX(), getY());
 
-        body = world.createBody(bodyDef);
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(getWidth(), getHeight());
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1;
-
-
-        body.createFixture(fixtureDef);
-
-        shape.dispose();
-    }
 
     @Override
     public boolean remove() {
@@ -100,6 +84,21 @@ public abstract class GameEntity extends Actor {
         return super.remove();
     }
 
+    @Override
+    public boolean findCollision(ConicHitbox other) {
+        return hitBox.intersects(other.getHitbox().getBounds());
+    }
+
+
+    @Override
+    public void updateHitbox() {
+        hitBox.setFrame(getX() - getWidth()/2, getY() - getHeight()/2, getWidth(), getHeight());
+    }
+
+    @Override
+    public Ellipse2D getHitbox() {
+        return hitBox;
+    }
 
     public abstract GameModel getModel();
 }
