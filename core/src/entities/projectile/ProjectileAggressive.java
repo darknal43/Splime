@@ -2,6 +2,7 @@ package entities.projectile;
 
 import com.badlogic.gdx.math.Vector2;
 import entities.Player;
+import tools.ServerTools.databases.DatabaseStructure;
 
 /**
  *
@@ -11,8 +12,8 @@ import entities.Player;
 public class ProjectileAggressive extends Player {
     private Player mainPlayer;
 
-    public ProjectileAggressive(Player mainPlayer, float x, float y){
-        super(x, y, 0, 0);
+    public ProjectileAggressive(Player mainPlayer, float x, float y, DatabaseStructure structure){
+        super(x, y, structure);
         setScale(0.5F);
         this.mainPlayer = mainPlayer;
     }

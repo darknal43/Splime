@@ -20,6 +20,7 @@ import driver.GameLoopFactory;
 import entities.effects.SlimeGlow;
 import entities.projectile.ProjectileBenign;
 import server.models.GameModel;
+import server.models.PlayerModel;
 import state.screens.AbstractScreen;
 import state.screens.GameScreen;
 import tools.AnimationManager;
@@ -49,12 +50,16 @@ public class Player extends GameEntity {
 
     private boolean cameraReset;
 
+    public static Player initiateFromModel(PlayerModel playerModel){
+        return new Player(playerModel.getX(), playerModel.getY());
+    }
+
     public Player(){
         super();
         cameraReset = true;
     }
 
-    public Player(float x, float y, float width, float height, DatabaseStructure databaseStructure){
+    public Player(float x, float y, DatabaseStructure databaseStructure){
         super(x, y, width, height, databaseStructure);
         cameraReset = false;
     }

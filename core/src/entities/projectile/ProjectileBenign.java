@@ -12,8 +12,11 @@ import entities.GameEntity;
 import entities.Player;
 import entities.PlayerAnimationImplementation;
 import server.models.GameModel;
+import server.models.ProjectileBenignModel;
 import state.screens.AbstractScreen;
 import tools.AbstractAnimationImplementation;
+import tools.ServerTools.databases.LocalDatabase;
+import tools.ServerTools.databases.LocalDatabaseFactory;
 
 /**
  *
@@ -29,6 +32,15 @@ public class ProjectileBenign extends GameEntity{
     private float chargeAmount;
     private Sprite [] sprites;
     private Vector2 rotationAngle;
+
+    public static ProjectileBenign initiateFromModel(ProjectileBenignModel model){
+        //TODO Add player from localdatabase
+        return new ProjectileBenign(
+                ,
+                model.getChargeAmount(),
+                new Vector2(model.getTargetX(), model.getTargetY())
+        );
+    }
 
     public ProjectileBenign(Player player, float chargeAmount, Vector2 targetDirection){
         super(player.getX(), player.getY(), 0, 0);
