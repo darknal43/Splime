@@ -9,6 +9,14 @@ public class ProjectileBenignModel extends GameModel{
     int targetX;
     int targetY;
 
+    private String className = ProjectileBenignModel.class.getName();
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
     public float getChargeAmount() {
         return chargeAmount;
     }

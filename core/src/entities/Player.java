@@ -253,6 +253,10 @@ public class Player extends GameEntity {
     }
 
 
+    @Override
+    public void pushCollision() {
+
+    }
 }
 
 
