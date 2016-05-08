@@ -3,6 +3,9 @@ package entities;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Queue;
 import driver.GameLoop;
 import driver.GameLoopFactory;
 import entities.effects.SlimeGlow;
@@ -37,7 +41,7 @@ public class Player extends GameEntity {
     private InputHandler inputHandler;
     private Sprite [] sprites;
     private boolean charging;
-
+    private Arrow arrow;
     private float chargeAmount;
 
     //Test
@@ -46,7 +50,7 @@ public class Player extends GameEntity {
     private Vector2 rotationAngle;
 
     private float previous;
-
+    private boolean shot = false;
     private float totalDelta;
 
     private boolean cameraReset;
@@ -59,10 +63,11 @@ public class Player extends GameEntity {
         super();
         cameraReset = true;
     }
-
+    private Sound sound;
     public Player(float x, float y, DatabaseStructure databaseStructure){
         super(x, y, databaseStructure);
         cameraReset = false;
+
     }
 
 
@@ -73,9 +78,10 @@ public class Player extends GameEntity {
     }
 
     private void initiateSprite(){
+        initializeTrail();
         sprites = new Sprite[3];
         updateSprite(0);
-
+        sound = Gdx.audio.newSound(new FileHandle("sounds\\sounds\\Spit_Splat-Mike_Koenig-1170500447.wav"));
     }
 
 
@@ -95,14 +101,18 @@ public class Player extends GameEntity {
 
     void charge(){
         charging = true;
+        shot = true;
         chargeAmount = 0.5F;
     }
 
     void shoot(){
+
         AbstractScreen abstractScreen = (AbstractScreen)GameLoopFactory.getMainGameLoop().getScreen();
         ProjectileBenign newShot = new ProjectileBenign(this, chargeAmount);
         abstractScreen.getStage().addActor(newShot);
         charging = false;
+        sound.play();
+        shot = false;
     }
 
 
@@ -119,6 +129,10 @@ public class Player extends GameEntity {
     //-------- Your Update Loops ------------------------------------------------------
     @Override
     public void act(float delta) {
+        if (arrow == null){
+
+            arrow = new Arrow(this);
+        }
         super.act(delta);
         updateSprite(delta);
         updateActor();
@@ -129,16 +143,23 @@ public class Player extends GameEntity {
                 charging = false;
                 chargeAmount = 1;
             }
+
         }
+        removeTrail();
+        arrow.act(delta);
     }
 
 
 
+
     private void move(){
-        travelVector.setLength(130/3F);
+        updateTrail();
+
+        travelVector.setLength(getScaleX() == 1.0 ? 130/3F: 130/2.3F);
         if (totalDelta !=  previous) {
             this.addAction(Actions.moveBy(travelVector.x, travelVector.y));
             previous = totalDelta;
+
         }
     }
 
@@ -153,7 +174,7 @@ public class Player extends GameEntity {
                     new Vector2(275, 234),
                     new Vector2(334, 200),
             };
-        setSize(sizes[keyframe].x, sizes[keyframe].y);
+        setSize(sizes[keyframe].x*getScaleX(), sizes[keyframe].y*getScaleX());
     }
 
     private void updateSprite(float delta){
@@ -222,7 +243,7 @@ public class Player extends GameEntity {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-
+        drawTrail(batch);
         int counter = 0;
 
         for (Sprite sprite : sprites){
@@ -253,13 +274,60 @@ public class Player extends GameEntity {
 
             counter++;
         }
+
+        if (shot) arrow.draw(batch, 1);
+
         //TODO THIS IS THE HITBOX CHECK
         //drawHitBox(batch);
+
     }
 
 
     @Override
     public void pushCollision() {
+
+    }
+    private Queue<Sprite> queue;
+    static Texture trail;
+    Vector2 rot;
+    private void initializeTrail(){
+        rot = new Vector2(1, 0);
+        queue = new Queue<>();
+        if (trail == null) trail = new Texture("player\\trail.png");
+        for (int i = 0; i < 10; i ++){
+            updateTrail();
+
+        }
+    }
+
+    public float getChargeAmount() {
+        return chargeAmount;
+    }
+
+    private void drawTrail(Batch batch){
+        int index = 0;
+        int length = queue.size;
+        for (Sprite sprite : queue){
+            sprite.setScale(getScaleX());
+            sprite.setAlpha((float)(length - index++)/length);
+            sprite.draw(batch);
+
+        }
+    }
+    private int count = 0;
+    private void removeTrail(){
+        if (count++%6 == 0) {
+            queue.removeLast();
+        }
+    }
+
+    private void updateTrail(){
+        rot.lerp(travelVector, 0.1F).nor();
+
+        Sprite sprite = new Sprite(trail);
+        sprite.setBounds(getX()-trail.getWidth()/2, getY()-trail.getHeight()/2, trail.getWidth(), trail.getHeight());
+        sprite.setRotation(rot.angle());
+        queue.addFirst(sprite);
 
     }
 

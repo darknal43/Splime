@@ -24,15 +24,10 @@ public class ProjectileAggressive extends Player {
     public void act(float delta) {
         super.act(delta);
         setTargetLocation(mainPlayer.getX(), mainPlayer.getY());
-        despawn();
+        if (this.findCollision(mainPlayer)) pushCollision();
     }
 
-    private void despawn(){
 
-        if (Math.abs(new Vector2(targetLocation).sub(currentLocation).len()) <= 10){
-            this.remove();
-        }
-    }
 
     @Override
     public GameModel getModel() {
@@ -41,6 +36,11 @@ public class ProjectileAggressive extends Player {
         projectileAggressiveModel.setX(getX());
         projectileAggressiveModel.setY(getY());
         return projectileAggressiveModel;
+    }
+
+    @Override
+    public void pushCollision() {
+        remove();
     }
 }
 

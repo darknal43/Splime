@@ -113,8 +113,8 @@ public abstract class AbstractScreen implements Screen, Constants {
     @Override
     public void render(float delta) {
 
-        draw();
         update(delta);
+        draw();
     }
 
     @Override

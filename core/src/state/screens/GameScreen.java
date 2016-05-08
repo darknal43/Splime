@@ -1,12 +1,19 @@
 package state.screens;
 
+import com.badlogic.gdx.Audio;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import driver.GameLoopFactory;
 import entities.GameEntity;
 import entities.Player;
@@ -16,7 +23,8 @@ import tools.WorldFactory;
  * Created by Hongyu Wang on 5/5/2016.
  */
 public class GameScreen extends AbstractScreen{
-
+    static float deltax = -10000;
+    static float deltay = -10000;
     @Override
     protected void subclassInit() {
         initiateBackground();
@@ -40,16 +48,37 @@ public class GameScreen extends AbstractScreen{
 
     }
 
+    private static Texture background;
     private void initiateBackground(){
 
-        Texture background;
         background = new Texture("background\\hexTiles.png");
-        background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        disposables.add(background);
-        Image image = new Image(background);
+        float x = 0, y = 0;
+
+        for (int i = 0; i < 50; i ++) {
+            addImage(background, x, y + i*background.getHeight());
+        }
+
 
     }
 
+
+    static Array<Image> images = new Array<>();
+    static boolean acted = false;
+    private void addImage(Texture texture, float xpos, float ypos){
+        if (xpos > 50*texture.getWidth() || ypos > 50*texture.getWidth()){
+            return;
+        }
+
+
+        Image image = new Image(texture);
+        images.add(image);
+
+        image.setBounds(xpos + deltax, ypos + deltay, texture.getWidth(), texture.getHeight());
+        stage.addActor(image);
+
+
+        addImage(texture, xpos + texture.getWidth(), ypos);
+    }
 
 
     @Override
@@ -67,6 +96,10 @@ public class GameScreen extends AbstractScreen{
         WorldFactory.getWorld().step(delta, 8, 3);
 
 
+        if (!acted) {
+            acted = true;
+        }
+
     }
 
     static public class CameraManager extends InputAdapter {
@@ -78,8 +111,12 @@ public class GameScreen extends AbstractScreen{
         }
 
         public static void updateCamera(Vector2 travelVector){
+            Vector2 difference = new Vector2(travelVector).sub(new Vector2(getCamera().position.x, getCamera().position.y));
+
+
 
             getCamera().position.lerp(new Vector3(travelVector, 0), 0.1F);
+
         }
 
         public static void resetCameraRatio(){

@@ -63,7 +63,7 @@ public class ProjectileBenign extends GameEntity{
         super.init();
         rotationAngle = new Vector2(1, 0);
         this.animationManager = new ProjectileAnimationImplementation(1);
-
+        setSize(164, 131);
 
     }
 

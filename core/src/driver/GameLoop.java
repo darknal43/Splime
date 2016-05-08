@@ -3,6 +3,8 @@ package driver;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
@@ -26,7 +28,11 @@ public class GameLoop extends Game {
         ScreenShell.initiate();
         this.world = WorldFactory.getWorld();
         this.rayHandler = RayFactory.getRayHandler();
-
+        Music music;
+        FileHandle file = new FileHandle("sounds\\music\\supaSayanBGM.mp3");
+        music = Gdx.audio.newMusic(file);
+        music.setLooping(true);
+        music.play();
 
     }
 
@@ -34,7 +40,7 @@ public class GameLoop extends Game {
 
     @Override
     public void render () {
-        Gdx.gl.glClearColor(0.7F, 0.2F, 0.7F, 1);
+        Gdx.gl.glClearColor(0.1F, 0.1F, 0.1F, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
@@ -44,6 +50,8 @@ public class GameLoop extends Game {
 
         //rayHandler.render();
         super.render();
+
+
 
 
 

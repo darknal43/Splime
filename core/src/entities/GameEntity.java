@@ -70,8 +70,10 @@ public abstract class GameEntity extends Actor implements ConicHitbox{
 
     @Override
     public void act(float delta) {
+
         super.act(delta);
         updateHitbox();
+
         animationManager.update(delta, travelVector);
     }
 
