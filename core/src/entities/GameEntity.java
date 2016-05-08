@@ -17,6 +17,8 @@ import javafx.geometry.Bounds;
 import javafx.scene.shape.Ellipse;
 import server.models.GameModel;
 import tools.AnimationManager;
+import tools.ServerTools.databases.DatabaseStructure;
+import tools.ServerTools.databases.LocalDatabaseFactory;
 import tools.WorldFactory;
 import tools.hitboxes.ConicHitbox;
 
@@ -42,14 +44,14 @@ public abstract class GameEntity extends Actor implements ConicHitbox{
 
 
     public GameEntity(){
-        this(0, 0, 0, 0);
+        this(0, 0);
     }
 
 
-    public GameEntity(float x, float y, float width, float height){
+    public GameEntity(float x, float y, DatabaseStructure databaseStructure){
         
 
-        setBounds(x, y, width, height);
+        setBounds(x, y, 0, 0);
 
         init();
 

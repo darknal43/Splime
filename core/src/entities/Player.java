@@ -26,6 +26,8 @@ import state.screens.GameScreen;
 import tools.AnimationManager;
 import tools.Constants;
 import tools.ServerTools.databases.DatabaseStructure;
+import tools.ServerTools.databases.LocalDatabase;
+import tools.ServerTools.databases.LocalDatabaseFactory;
 
 /**
  *
@@ -59,7 +61,7 @@ public class Player extends GameEntity {
     }
 
     public Player(float x, float y, DatabaseStructure databaseStructure){
-        super(x, y, width, height, databaseStructure);
+        super(x, y, databaseStructure);
         cameraReset = false;
     }
 
@@ -98,7 +100,7 @@ public class Player extends GameEntity {
 
     void shoot(){
         AbstractScreen abstractScreen = (AbstractScreen)GameLoopFactory.getMainGameLoop().getScreen();
-        ProjectileBenign newShot = new ProjectileBenign(this, chargeAmount, travelVector, databaseStructure);
+        ProjectileBenign newShot = new ProjectileBenign(this, chargeAmount, travelVector);
         abstractScreen.getStage().addActor(newShot);
         charging = false;
     }
