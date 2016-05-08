@@ -2,7 +2,6 @@ package tools.ServerTools.generators;
 
 
 import server.models.PlayerModel;
-import server.models.ProjectileModel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +29,7 @@ public enum Tags {
      */
     Tags(){
         classes = new String[]{
-                ProjectileModel.class.getName(),
+                //ProjectileModel.class.getName(),
                 PlayerModel.class.getName()
         };
 

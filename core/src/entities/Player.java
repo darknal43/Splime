@@ -40,7 +40,6 @@ public class Player extends GameEntity {
 
     //Test
     private SlimeGlow glow;
-    private long key;
 
     private Vector2 rotationAngle;
 
@@ -247,17 +246,11 @@ public class Player extends GameEntity {
 
             counter++;
         }
-
-        drawHitBox(batch);
+        //TODO THIS IS THE HITBOX CHECK
+        //drawHitBox(batch);
     }
 
-    public long getKey() {
-        return key;
-    }
 
-    public void setKey(long key) {
-        this.key = key;
-    }
 }
 
 

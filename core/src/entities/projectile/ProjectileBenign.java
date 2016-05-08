@@ -129,6 +129,11 @@ public class ProjectileBenign extends GameEntity{
     public GameModel getModel() {
         return null;
     }
+
+    @Override
+    public void pushCollision() {
+
+    }
 }
 
 

@@ -31,6 +31,8 @@ public abstract class GameEntity extends Actor implements ConicHitbox{
     protected Vector2 currentLocation;
     protected Vector2 targetLocation;
     protected Vector2 travelVector;
+    private int key;
+
     protected static ShapeRenderer shapeRenderer;
 
     protected Ellipse hitBox;
@@ -127,6 +129,14 @@ public abstract class GameEntity extends Actor implements ConicHitbox{
 
         sprite.setRotation((float)hitBox.getRotate());
         sprite.draw(batch);
+    }
+
+    public int getKey() {
+        return key;
+    }
+
+    public void setKey(int key) {
+        this.key = key;
     }
 
     public abstract GameModel getModel();
