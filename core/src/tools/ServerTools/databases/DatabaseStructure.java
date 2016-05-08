@@ -2,6 +2,7 @@ package tools.ServerTools.databases;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import entities.GameEntity;
 import server.models.GameModel;
 import tools.Utils;
 
@@ -13,10 +14,13 @@ import java.util.Map;
  */
 public abstract class DatabaseStructure {
     protected Map<Long, GameModel> data;
-    protected Array<Actor> actorList;
+    protected Map<Long, GameEntity> actorMap;
+
+
 
     public DatabaseStructure(){
         this.data = Utils.newConcurrentMap();
+        this.actorMap = Utils.newConcurrentMap();
     }
 
     public void addModel(GameModel model){
@@ -25,5 +29,9 @@ public abstract class DatabaseStructure {
 
     public GameModel getModel(long key){
         return data.get(key);
+    }
+
+    public GameEntity getEntity(long key ){
+        return actorMap.get(key);
     }
 }

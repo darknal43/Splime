@@ -41,10 +41,10 @@ public abstract class GameEntity extends Actor implements ConicHitbox{
 
     protected Array<Disposable> disposables;
     protected World world;
-
+    protected DatabaseStructure databaseStructure;
 
     public GameEntity(){
-        this(0, 0);
+        this(0, 0, null);
     }
 
 
@@ -139,6 +139,14 @@ public abstract class GameEntity extends Actor implements ConicHitbox{
 
     public void setKey(int key) {
         this.key = key;
+    }
+
+    public DatabaseStructure getDatabaseStructure() {
+        return databaseStructure;
+    }
+
+    public void setDatabaseStructure(DatabaseStructure databaseStructure) {
+        this.databaseStructure = databaseStructure;
     }
 
     public abstract GameModel getModel();

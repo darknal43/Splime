@@ -20,19 +20,20 @@ public class LocalDatabase extends DatabaseStructure{
 
     LocalDatabase(){
         super();
-        this.actorList = ((AbstractScreen)(GameLoopFactory.getMainGameLoop().getScreen())).getStage().getActors();
     }
 
     @Override
     public void addModel(GameModel model) {
 
+        GameEntity entity = new GameEntity(model);
         if(data.containsKey(model.getKey())){
-            GameEntity entity = new GameEntity(model);
             if(entity instanceof )
             ((AbstractScreen)(GameLoopFactory.getMainGameLoop().getScreen())).getStage();
         }
 
         data.put(model.getKey(), model);
+        actorMap.put(model.getKey(), entity);
+
 
     }
 

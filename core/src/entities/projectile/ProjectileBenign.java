@@ -15,6 +15,7 @@ import server.models.GameModel;
 import server.models.ProjectileBenignModel;
 import state.screens.AbstractScreen;
 import tools.AbstractAnimationImplementation;
+import tools.ServerTools.databases.DatabaseStructure;
 import tools.ServerTools.databases.LocalDatabase;
 import tools.ServerTools.databases.LocalDatabaseFactory;
 
@@ -33,17 +34,17 @@ public class ProjectileBenign extends GameEntity{
     private Sprite [] sprites;
     private Vector2 rotationAngle;
 
-    public static ProjectileBenign initiateFromModel(ProjectileBenignModel model){
+    public static ProjectileBenign initiateFromModel(ProjectileBenignModel model, DatabaseStructure databaseStructure){
         //TODO Add player from localdatabase
         return new ProjectileBenign(
-                ,
+                (Player)databaseStructure.getEntity(model.getPlayerKey()),
                 model.getChargeAmount(),
                 new Vector2(model.getTargetX(), model.getTargetY())
         );
     }
 
     public ProjectileBenign(Player player, float chargeAmount, Vector2 targetDirection){
-        super(player.getX(), player.getY(), 0, 0);
+        super(player.getX(), player.getY(), 0, 0, );
 
         System.out.println(chargeAmount);
 
@@ -112,7 +113,7 @@ public class ProjectileBenign extends GameEntity{
         if (Math.abs(chargeAmount - SMALLEST_CHARGE) <= 0.01F){
             this.remove();
             AbstractScreen abstractScreen = (AbstractScreen) GameLoopFactory.getMainGameLoop().getScreen();
-            ProjectileAggressive aggressive = new ProjectileAggressive(player, getX(), getY());
+            ProjectileAggressive aggressive = new ProjectileAggressive(player, getX(), getY(), databaseStructure);
             abstractScreen.getStage().addActor(aggressive);
         }
     }

@@ -51,8 +51,8 @@ public class Player extends GameEntity {
 
     private boolean cameraReset;
 
-    public static Player initiateFromModel(PlayerModel playerModel){
-        return new Player(playerModel.getX(), playerModel.getY());
+    public static Player initiateFromModel(PlayerModel playerModel, DatabaseStructure databaseStructure){
+        return new Player(playerModel.getX(), playerModel.getY(), databaseStructure);
     }
 
     public Player(){
