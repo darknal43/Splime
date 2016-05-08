@@ -36,14 +36,16 @@ public class GameLoop extends Game {
     public void render () {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        super.render();
+
+
 
         world.step(1/60, 0, 0);
         rayHandler.update();
         rayHandler.setCombinedMatrix(GameScreen.CameraManager.getCamera());
 
-        rayHandler.render();
+        //rayHandler.render();
 
+        super.render();
 
 
 

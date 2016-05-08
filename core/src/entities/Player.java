@@ -165,10 +165,33 @@ public class Player extends GameEntity {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
+        int counter = 0;
+
         for (Sprite sprite : sprites){
 
-            sprite.draw(batch);
+            if(counter > 0) {
+                int srcFunc = batch.getBlendSrcFunc();
+                int dstFunc = batch.getBlendDstFunc();
 
+                // Let's enable blending
+                batch.end();
+                batch.enableBlending();
+                batch.begin();
+
+                // blend them
+                batch.setBlendFunction( GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+
+                sprite.draw(batch);
+
+                batch.end();
+                batch.begin();
+                batch.setBlendFunction(srcFunc, dstFunc);
+
+            }else{
+                sprite.draw(batch);
+            }
+
+            counter++;
         }
 
     }

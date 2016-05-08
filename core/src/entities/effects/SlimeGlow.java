@@ -16,6 +16,9 @@ public class SlimeGlow{
     private float degreeOne;
     private float degreeTwo;
     private float degreeThree;
+    private ConeLight lightOne;
+    private ConeLight lightTwo;
+    private ConeLight lightThree;
     private Color colour;
     private RayHandler rayHandler;
 
@@ -26,16 +29,22 @@ public class SlimeGlow{
         this.rayHandler = RayFactory.getRayHandler();
 
         float degreeOne = 60;
-        ConeLight lightOne = new ConeLight(rayHandler,100, colour, 100, xPos, yPos, degreeOne, 60);
+        lightOne = new ConeLight(rayHandler,100, colour, 500, xPos, yPos, degreeOne, 60);
         float degreeTwo = 180;
-        ConeLight lightTwo = new ConeLight(rayHandler,100, colour, 100, xPos, yPos, degreeTwo, 60);
+        lightTwo = new ConeLight(rayHandler,100, colour, 500, xPos, yPos, degreeTwo, 60);
         float degreeThree= 300;
-        ConeLight lightThree = new ConeLight(rayHandler,100, colour, 100, xPos, yPos, degreeThree, 60);
+        lightThree = new ConeLight(rayHandler,100, colour, 500, xPos, yPos, degreeThree, 60);
     }
 
     public void update(float x, float y){
         this.xPos = x;
         this.yPos = y;
+        lightOne.setPosition(xPos,yPos);
+        lightOne.setConeDegree(degreeOne);
+        lightTwo.setPosition(xPos,yPos);
+        lightTwo.setConeDegree(degreeTwo);
+        lightThree.setPosition(xPos,yPos);
+        lightThree.setConeDegree(degreeThree);
 
         animate();
     }
