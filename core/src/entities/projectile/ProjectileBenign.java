@@ -38,12 +38,11 @@ public class ProjectileBenign extends GameEntity{
         //TODO Add player from localdatabase
         return new ProjectileBenign(
                 (Player)databaseStructure.getEntity(model.getPlayerKey()),
-                model.getChargeAmount(),
-                new Vector2(model.getTargetX(), model.getTargetY())
+                model.getChargeAmount()
         );
     }
 
-    public ProjectileBenign(Player player, float chargeAmount, Vector2 targetDirection){
+    public ProjectileBenign(Player player, float chargeAmount){
         super(player.getX(), player.getY(), player.getDatabaseStructure());
 
         System.out.println(chargeAmount);
@@ -51,7 +50,7 @@ public class ProjectileBenign extends GameEntity{
         this.chargeAmount = chargeAmount;
         this.player = player;
 
-        this.travelVector = new Vector2(targetDirection);
+        this.travelVector = new Vector2(player.getTravelVector());
         this.targetLocation = new Vector2(travelVector).setLength(10000).add(currentLocation);
 
 
@@ -133,8 +132,6 @@ public class ProjectileBenign extends GameEntity{
         projectileBenignModel.setChargeAmount(chargeAmount);
         projectileBenignModel.setX(getX());
         projectileBenignModel.setY(getY());
-        projectileBenignModel.setTargetX(targetLocation.x);
-        projectileBenignModel.setTargetY(targetLocation.y);
 
         return projectileBenignModel;
     }

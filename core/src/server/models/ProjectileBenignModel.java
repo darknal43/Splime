@@ -7,8 +7,6 @@ package server.models;
 public class ProjectileBenignModel extends GameModel{
     float chargeAmount;
     int playerKey;
-    float targetX;
-    float targetY;
     float x;
     private String className = ProjectileBenignModel.class.getName();
     float y;
@@ -53,19 +51,5 @@ public class ProjectileBenignModel extends GameModel{
         this.playerKey = playerKey;
     }
 
-    public float getTargetX() {
-        return targetX;
-    }
 
-    public void setTargetX(float targetX) {
-        this.targetX = targetX;
-    }
-
-    public float getTargetY() {
-        return targetY;
-    }
-
-    public void setTargetY(float targetY) {
-        this.targetY = targetY;
-    }
 }

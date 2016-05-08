@@ -23,7 +23,7 @@ public class FireEvent extends Event {
 
     @Override
     public void execute() {
-        ProjectileBenign projectile = new ProjectileBenign(player, charge, new Vector2(x, y));
+        ProjectileBenign projectile = new ProjectileBenign(player, charge);
         projectile.setKey(database.getAvailableKey());
         database.addModel(projectile.getModel());
         game.getActorMap().putIfAbsent(projectile.getKey(), projectile);

@@ -142,5 +142,9 @@ public abstract class GameEntity extends Actor implements ConicHitbox{
         this.databaseStructure = databaseStructure;
     }
 
+    public Vector2 getTravelVector(){
+        return travelVector;
+    }
+
     public abstract GameModel getModel();
 }

@@ -100,7 +100,7 @@ public class Player extends GameEntity {
 
     void shoot(){
         AbstractScreen abstractScreen = (AbstractScreen)GameLoopFactory.getMainGameLoop().getScreen();
-        ProjectileBenign newShot = new ProjectileBenign(this, chargeAmount, travelVector);
+        ProjectileBenign newShot = new ProjectileBenign(this, chargeAmount);
         abstractScreen.getStage().addActor(newShot);
         charging = false;
     }
@@ -262,6 +262,8 @@ public class Player extends GameEntity {
     public void pushCollision() {
 
     }
+
+
 }
 
 
